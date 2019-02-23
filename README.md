@@ -13,6 +13,11 @@ Controller Contract which exposes public functions that invokes other contracts
     b. Parameters: Address - This indicates that this contract and it's sub-contracts belong to this Manufacturer. Used for validation wherever manufacturer validation needs to be 
     c. Stored As: private address member
     d. View: Viewable as a read only function
+  #####  Members
+    a. self_Address: A pointer to the giverning body.
+    b. enum register_seller_errors {ALREADY_REGISTERED,IN_REVIEW,ADDED}
+    c. enum raise_invoice_errors {WRONG_PO_ADDRESS,DUPLICATE_INVOICE,INVOICE_PROCESSED}
+    D. enum raise_PO_errors {TODO}
   #####  Functions
     a. RegisterSeller
       Modifiers: None
