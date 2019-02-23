@@ -3,7 +3,7 @@ Blockchain backed Invoice System
 
 # Create the Following SmartContracts 
 
-||ContractName||Contract Functions||  
+
 ## Goals 
 
 ### ChainInvoice Governance Contract* 
