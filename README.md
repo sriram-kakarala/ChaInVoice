@@ -6,7 +6,7 @@ Blockchain backed Invoice System
 
 ## Goals 
 
-### ChainInvoice Governance Contract* 
+### ChainInvoice Governance Contract
 Controller Contract which exposes public functions that invokes other contracts 
   ##### Constructor/Init
     a. Yes
