@@ -40,10 +40,10 @@ Controller Contract which exposes public functions that invokes other contracts
 ### Supplier Validation Contract  
 Invoked by ChainInVoice Governance Contract to validate Supplier
   #####  Functions
-  a. validateSeller(address)
-  Modifier: _require(invoker.address == chaininvoice.getGoiverningBody())_
-  Rules: if(address.notIn(Supplier_Address_List)) && Oracle.isValidSupplier(Address)
-  Return: True
+    a. validateSeller(address)
+      Modifier: _require(invoker.address == chaininvoice.getGoiverningBody())_
+      Rules: if(address.notIn(Supplier_Address_List)) && Oracle.isValidSupplier(Address)
+      Return: True
   
 ### Supplier Registry Contract  
 1. Invoked by Governance to insert a valid supplier  
@@ -52,15 +52,15 @@ Invoked by ChainInVoice Governance Contract to validate Supplier
     b. SupplierStatus
     c. SupplierName
   #####  Members
-  a. Supplier_Address_List<Address>
+    a. Supplier_Address_List<Address>
   #####  Functions
-  a. getSupplierAddress_List()
-  b. isValidSupplier(supplier_address) return Supplier_Address_List.contains(supplier_address);
-  c. addSupplier(supplier_address)
-    Modifiers: _require(invoker.address == chaingovernance.getGoverningBody())
-    Rules:
-    Action: Supplier_Address_List.add(supplier_address)
-    Return: True/False
+    a. getSupplierAddress_List()
+    b. isValidSupplier(supplier_address) return Supplier_Address_List.contains(supplier_address);
+    c. addSupplier(supplier_address)
+      Modifiers: _require(invoker.address == chaingovernance.getGoverningBody())
+      Rules:
+      Action: Supplier_Address_List.add(supplier_address)
+      Return: True/False
   
 
 ############################## TODO #############################
