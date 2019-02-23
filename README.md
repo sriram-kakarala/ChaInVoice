@@ -7,7 +7,7 @@ Blockchain backed Invoice System
 ## Goals 
 
 ### ChainInvoice Governance Contract* 
-1. Controller Contract which exposes public functions that invokes other contracts 
+Controller Contract which exposes public functions that invokes other contracts 
   ##### Constructor/Init
     a. Yes
     b. Parameters: Address - This indicates that this contract and it's sub-contracts belong to this Manufacturer. Used for validation wherever manufacturer validation needs to be 
@@ -32,15 +32,39 @@ Blockchain backed Invoice System
       Rule: sellers_address.in(Suppliers_Address_List) && po_address.in(PO_ADDRESS_LIST) && po_address.seller_address == sellers_address
       Return: True/Fasle - Eventually a Receipt/Confirmation
       Emit: Transaction Log
-      
-2. PurcahseOrderRegistry Contract
-  Functions
-    a.
+     d. getGoverningBody()
+     Modifiers: None
+     Returns: Self.Address
+     
+
 ### Supplier Validation Contract  
-1. Invoked by Governance 
-2. Validates Supplier using Oracle 
+Invoked by ChainInVoice Governance Contract to validate Supplier
+  #####  Functions
+  a. validateSeller(address)
+  Modifier: _require(invoker.address == chaininvoice.getGoiverningBody())_
+  Rules: if(address.notIn(Supplier_Address_List)) && Oracle.isValidSupplier(Address)
+  Return: True
+  
 ### Supplier Registry Contract  
 1. Invoked by Governance to insert a valid supplier  
+  #####  Struct
+    a. SupplierAddress
+    b. SupplierStatus
+    c. SupplierName
+  #####  Members
+  a. Supplier_Address_List<Address>
+  #####  Functions
+  a. getSupplierAddress_List()
+  b. isValidSupplier(supplier_address) return Supplier_Address_List.contains(supplier_address);
+  c. addSupplier(supplier_address)
+    Modifiers: _require(invoker.address == chaingovernance.getGoverningBody())
+    Rules:
+    Action: Supplier_Address_List.add(supplier_address)
+    Return: True/False
+  
+
+############################## TODO #############################
+
 ### Purchase Order Validation Contract  
 1. Invoked by Governance to validate a Purchase Order  
 2. Invoked by Governance to update PO status 
@@ -51,6 +75,9 @@ Blockchain backed Invoice System
 1. Invoked by Governance to validate an incoming RaiseInvoice request  
 ### Invoice Registry Contract 
 3. Invoked by Governance to insert an invoice to registry  
+### PurcahseOrderRegistry Contract
+  Functions
+    a.
 
 
 
