@@ -5,8 +5,8 @@ import "./PurchaseOrderRegistry.sol";
 contract  invoiceRegistry{
     
     struct invoice {
-        uint256 invoiceNumber;
-        uint256 piNum;
+        uint256 invoiceNum;
+        uint256 poNum;
         address manufacturerAddress;
         address supplierAddress;
     }
@@ -15,20 +15,31 @@ contract  invoiceRegistry{
     invoice[] invoices;
     uint256 invoiceNumber=1;
     
-    function createInvoice(address _manufacturer_address, address _supplierAddress, uint256 _piNum)
+    function createInvoice(uint256 _invoiceNum, uint256 _poNum,address _manufacturer_address, address _supplierAddress)
     public returns (uint256) {
         
         require(_manufacturer_address != address(0));
         require(_supplierAddress != address(0));
-        require(_piNum != 0);
-        
+        require(_poNum != 0);
+        require(_invoiceNum != 0);
         
         uint256 currinvoiceNumber = invoiceNumber;
-        invoiceMap[invoiceNumber] = invoice(invoiceNumber, _piNum, _manufacturer_address, _supplierAddress);
+        invoiceMap[invoiceNumber] = invoice(_invoiceNum,_poNum, _manufacturer_address, _supplierAddress);
         invoices.push(invoiceMap[invoiceNumber]);
         invoiceNumber++;
         return currinvoiceNumber;
     }
-    
+     function getAllInvoices(address _supplier_address) public view returns (uint256[]) {
+        uint256[] memory poNumbers = new uint256[](invoices.length);
+        
+        for (uint i = 0; i < invoices.length; i++) {
+            invoice memory aInvoice = invoices[i];
+            if(aInvoice.supplierAddress == _supplier_address) {
+                poNumbers[i] = aInvoice.invoiceNum;
+            }
+        }
+        
+        return (poNumbers);
+    }
     
 }
