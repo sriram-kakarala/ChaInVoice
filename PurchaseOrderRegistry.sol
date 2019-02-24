@@ -1,7 +1,8 @@
 pragma solidity >=0.4.22 <0.6.0;
 import "./InvoiceGovernance.sol";
 import "./SupplierRegistry.sol";
-contract  PurchaseOrderRegistry is InvoiceGovernance{
+ 
+contract  PurchaseOrderRegistry{
     
     struct PurchaseOrder {
         uint256 piNumber;
@@ -26,18 +27,17 @@ contract  PurchaseOrderRegistry is InvoiceGovernance{
         return currPiNumber;
     }
     
-    // TODO: Add a function to get All PO for a manufacturer
-    function getAllPOS(address _manufacturer_address) public view returns (address[] memory) {
-        // TODO: Length of this need to be picked up dynamically
-        address[] memory addresses = new address[](purchaseOrders.length);
+
+    function getAllPOS(address _manufacturer_address) public view returns (uint256[]) {
+        uint256[] memory poNumbers = new uint256[](purchaseOrders.length);
         
         for (uint i = 0; i < purchaseOrders.length; i++) {
             PurchaseOrder memory aPurchase = purchaseOrders[i];
             if(aPurchase.manufacturerAddress == _manufacturer_address) {
-                addresses[i] = aPurchase.supplierAddress;
+                poNumbers[i] = aPurchase.piNumber;
             }
         }
         
-        return (addresses);
+        return (poNumbers);
     }
 }
