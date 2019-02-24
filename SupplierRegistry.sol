@@ -28,7 +28,8 @@ contract  SupplierRegistry{
         require(strAsBytes.length > 0);
         require(supplierMap[_supplierAddress].supplierAddress == address(0));
         
-        suppliers.push(Supplier(_supplierAddress, _manufacturer_address, _supplierName));
+        supplierMap[_supplierAddress] = Supplier(_supplierAddress, _manufacturer_address, _supplierName);
+        suppliers.push(supplierMap[_supplierAddress]);
         
     }
     
