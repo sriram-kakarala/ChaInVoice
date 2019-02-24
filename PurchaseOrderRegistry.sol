@@ -13,14 +13,16 @@ contract  PurchaseOrderRegistry{
     uint256 piNum = 1;
     
     function createPurchaseOrder(address _manufacturer_address, address _supplierAddress)
-    public {
+    public returns (uint256) {
         
         require(_manufacturer_address != address(0));
         require(_supplierAddress != address(0));
         
-        purchaseOrderMap[piNum] = PurchaseOrder(piNum,_manufacturer_address);
+        uint256 currPiNumber = piNum;
+        purchaseOrderMap[piNum] = PurchaseOrder(piNum, _manufacturer_address, _supplierAddress);
         purchaseOrders.push(purchaseOrderMap[piNum]);
         piNum++;
+        return currPiNumber;
     }
     
     // TODO: Add a function to get All PO for a manufacturer
