@@ -1,5 +1,4 @@
 pragma solidity >=0.4.22 <0.6.0;
-import "./InvoiceGovernance.sol";
 import "./SupplierRegistry.sol";
  
 contract  PurchaseOrderRegistry{
@@ -28,7 +27,7 @@ contract  PurchaseOrderRegistry{
     }
     
 
-    function getAllPOS(address _manufacturer_address) public view returns (uint256[]) {
+    function getAllPOS(address _manufacturer_address) public view returns (uint256 []) {
         uint256[] memory poNumbers = new uint256[](purchaseOrders.length);
         
         for (uint i = 0; i < purchaseOrders.length; i++) {
@@ -39,5 +38,19 @@ contract  PurchaseOrderRegistry{
         }
         
         return (poNumbers);
+    }
+    
+    function isValidPoForSupplier(uint256 po_number, address _seller_address) public view returns (bool) {
+       
+        for (uint i = 0; i < purchaseOrders.length; i++) {
+           PurchaseOrder memory aPo = purchaseOrders[i];
+           if(aPo.piNumber == po_number) {
+               if(aPo.supplierAddress == _seller_address) {
+                   return true;
+               }
+           }
+       }
+       
+       return false;
     }
 }
