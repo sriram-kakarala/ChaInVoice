@@ -1,57 +1,29 @@
 pragma solidity >=0.4.22 <0.6.0;
 
-contract  SupplierRegistry{
+contract  PurchaseOrderRegistry{
     
-/**    
- * a. getSupplierAddress_List()
- * b.--> isValidSupplier(supplier_address) return Supplier_Address_List.contains(supplier_address);
- * c. addSupplier(supplier_address)
- * Modifiers:--> _require(invoker.address == chaingovernance.getGoverningBody())
- * Rules:
- * Action: -->Supplier_Address_List.add(supplier_address)
- * Return: True/False 
- */
-    struct Supplier{
-        address supplierAddress;
+    struct PurchaseOrder {
+        uint256 piNumber;
         address manufacturerAddress;
-        string supplierName;
+        address supplierAddress;
     }
     
-    mapping(address => Supplier) supplierMap;
-    Supplier []  suppliers;
+    mapping(uint256 => PurchaseOrder) purchaseOrderMap;
+    PurchaseOrder []  purchaseOrders;
+    uint256 piNum = 1;
     
-    function addSupplier(address _manufacturer_address, address _supplierAddress,
-        string memory _supplierName)public{
+    function createPurchaseOrder(address _manufacturer_address, address _supplierAddress)
+    public returns (uint256) {
         
+        require(_manufacturer_address != address(0));
         require(_supplierAddress != address(0));
-        bytes memory strAsBytes = bytes(_supplierName);
-        require(strAsBytes.length > 0);
-        require(supplierMap[_supplierAddress].supplierAddress == address(0));
         
-        supplierMap[_supplierAddress] = Supplier(_supplierAddress, _manufacturer_address, _supplierName);
-        suppliers.push(supplierMap[_supplierAddress]);
-        
+        uint256 currPiNumber = piNum;
+        purchaseOrderMap[piNum] = PurchaseOrder(piNum, _manufacturer_address, _supplierAddress);
+        purchaseOrders.push(purchaseOrderMap[piNum]);
+        piNum++;
+        return currPiNumber;
     }
     
-    function getSupplier(address supplier_address)public view returns(address, address,string memory){
-        
-        Supplier memory supplier = supplierMap[supplier_address];
-        return(supplier.supplierAddress, supplier.manufacturerAddress,
-                supplier.supplierName);
-        
-    }
-    
-    function getAllSuppliersForAManufacturer(address _manufacturer_address) public view returns (address[] memory) {
-        // TODO: Length of this need to be picked up dynamically
-        address[] memory addresses = new address[](suppliers.length);
-        
-        for (uint i = 0; i < suppliers.length; i++) {
-            Supplier memory aSupplier = suppliers[i];
-            if(aSupplier.manufacturerAddress == _manufacturer_address) {
-                addresses[i] = aSupplier.supplierAddress;
-            }
-        }
-        
-        return (addresses);
-    }
+    // TODO: Add a function to get All PO for a manufacturer
 }
