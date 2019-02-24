@@ -2,7 +2,7 @@ pragma solidity >=0.4.22 <0.6.0;
 
 import "./PurchaseOrderRegistry.sol";
 
-contract  invoiceRegistry{
+contract  InvoiceRegistry{
     
     struct invoice {
         uint256 invoiceNum;
@@ -29,7 +29,8 @@ contract  invoiceRegistry{
         invoiceNumber++;
         return currinvoiceNumber;
     }
-     function getAllInvoices(address _supplier_address) public view returns (uint256[]) {
+    
+    function getAllInvoices(address _supplier_address) public view returns (uint256[]) {
         uint256[] memory poNumbers = new uint256[](invoices.length);
         
         for (uint i = 0; i < invoices.length; i++) {
