@@ -61,4 +61,16 @@ contract  SupplierRegistry{
         
         return (addresses);
     }
+    
+    function isAValidSupplier(address _seller_address) public view returns (bool) {
+       
+       for (uint i = 0; i < suppliers.length; i++) {
+           Supplier memory aSupplier = suppliers[i];
+           if(aSupplier.supplierAddress == _seller_address) {
+              return true;
+           }
+       }
+       
+       return false;
+   }
 }
