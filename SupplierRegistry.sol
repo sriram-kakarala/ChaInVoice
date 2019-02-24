@@ -1,36 +1,56 @@
-pragma solidity ^0.5.1;
+pragma solidity >=0.4.22 <0.6.0;
 
 contract  SupplierRegistry{
     
-/**    a. getSupplierAddress_List()
-b.--> isValidSupplier(supplier_address) return Supplier_Address_List.contains(supplier_address);
-c. addSupplier(supplier_address)
-  Modifiers:--> _require(invoker.address == chaingovernance.getGoverningBody())
-  Rules:
-  Action: -->Supplier_Address_List.add(supplier_address)
-  Return: True/False */
+/**    
+ * a. getSupplierAddress_List()
+ * b.--> isValidSupplier(supplier_address) return Supplier_Address_List.contains(supplier_address);
+ * c. addSupplier(supplier_address)
+ * Modifiers:--> _require(invoker.address == chaingovernance.getGoverningBody())
+ * Rules:
+ * Action: -->Supplier_Address_List.add(supplier_address)
+ * Return: True/False 
+ */
     struct Supplier{
         address supplierAddress;
-        uint256 supplierStatus;
+        address manufacturerAddress;
         string supplierName;
     }
     
-    Supplier []  supplier;
+    mapping(address => Supplier) supplierMap;
+    Supplier []  suppliers;
     
-    function addSupplier(address _supplierAddress,
-        uint256 _supplierStatus,string memory _supplierName)public{
+    function addSupplier(address _manufacturer_address, address _supplierAddress,
+        string memory _supplierName)public{
         
-        supplier.push(Supplier(_supplierAddress,_supplierStatus,_supplierName));
+        require(_supplierAddress != address(0));
+        bytes memory strAsBytes = bytes(_supplierName);
+        require(strAsBytes.length > 0);
+        require(supplierMap[_supplierAddress].supplierAddress == address(0));
         
-    }
-     function getSupplier(uint256 id)public view returns(address,uint256,string memory){
-        
-        return(supplier[id].supplierAddress,supplier[id].supplierStatus,
-                supplier[id].supplierName
-                );
+        suppliers.push(Supplier(_supplierAddress, _manufacturer_address, _supplierName));
         
     }
-    function isValidSupplier()public{
+    
+    function getSupplier(address supplier_address)public view returns(address, address,string memory){
         
+        Supplier memory supplier = supplierMap[supplier_address];
+        return(supplier.supplierAddress, supplier.manufacturerAddress,
+                supplier.supplierName);
+        
+    }
+    
+    function getAllSuppliersForAManufacturer(address _manufacturer_address) public view returns (address[] memory) {
+        // TODO: Length of this need to be picked up dynamically
+        address[] memory addresses = new address[](suppliers.length);
+        
+        for (uint i = 0; i < suppliers.length; i++) {
+            Supplier memory aSupplier = suppliers[i];
+            if(aSupplier.manufacturerAddress == _manufacturer_address) {
+                addresses[i] = aSupplier.supplierAddress;
+            }
+        }
+        
+        return (addresses);
     }
 }
