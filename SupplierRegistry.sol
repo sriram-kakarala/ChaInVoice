@@ -28,8 +28,10 @@ contract  SupplierRegistry{
         require(strAsBytes.length > 0);
         require(supplierMap[_supplierAddress].supplierAddress == address(0));
         
-        supplierMap[_supplierAddress] = Supplier(_supplierAddress, _manufacturer_address, _supplierName);
-        suppliers.push(supplierMap[_supplierAddress]);
+        /*supplierMap[_supplierAddress] = Supplier(_supplierAddress, _manufacturer_address, 
+        _supplierName);*/
+        suppliers.push(Supplier(_supplierAddress, _manufacturer_address, 
+        _supplierName));
         
     }
     
@@ -43,7 +45,12 @@ contract  SupplierRegistry{
     
     function getAllSuppliersForAManufacturer(address _manufacturer_address) public view returns (address[] memory) {
         // TODO: Length of this need to be picked up dynamically
-        address[] memory addresses = new address[](suppliers.length);
+        
+        uint length = 0;
+        if(suppliers.length > 0) {
+            length = suppliers.length;
+        }
+        address[] memory addresses = new address[](length);
         
         for (uint i = 0; i < suppliers.length; i++) {
             Supplier memory aSupplier = suppliers[i];
