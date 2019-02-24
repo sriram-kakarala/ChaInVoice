@@ -3,6 +3,7 @@ pragma experimental ABIEncoderV2;
 
 import "./SupplierRegistry.sol";
 import "./PurchaseOrderRegistry.sol";
+import "./InvoiceRegistry.sol";
 
 
 contract InvoiceGovernance {
@@ -12,6 +13,7 @@ contract InvoiceGovernance {
         string  name;
         address supplierRegistry;
         address purchaseOrderRegistry;
+        address invoiceRegistry;
     }
     
     
@@ -40,7 +42,7 @@ contract InvoiceGovernance {
         require(theManufacturersMap[ownerPublicKey].ownerPublicKey == address(0));
         
         theManufacturersMap[ownerPublicKey]  = Manufacturer(ownerPublicKey, name, 
-                                                    new SupplierRegistry(), new PurchaseOrderRegistry());
+                                                    new SupplierRegistry(), new PurchaseOrderRegistry(), new InvoiceRegistry());
         theManufacturersList.push(theManufacturersMap[ownerPublicKey]);
         return theManufacturersList.length;
     }
@@ -86,7 +88,7 @@ contract InvoiceGovernance {
         return register.getAllSuppliersForAManufacturer(msg.sender);
     }
     
-    function createPurcahseOrder() 
+    function createPurchaseOrder() 
                 payable public isGoverningBody returns (uint256) {
                     
         Manufacturer theManufcaturer = theManufacturersMap[msg.sender];
@@ -108,5 +110,24 @@ contract InvoiceGovernance {
         nonce++;
         return uint(sha3(nonce))%(min+max)-min;
     }
+    
+    function raiseInvoice(address manufacturer_address, 
+                address seller_address, uint256 po_number, uint256 invoiceNumber) public payable returns (uint256) {
+       
+       Manufacturer theManufcaturer = theManufacturersMap[manufacturer_address];
+       SupplierRegistry register = SupplierRegistry(theManufcaturer.supplierRegistry);
+       bool isValidSupplier = register.isAValidSupplier(seller_address);
+       
+       if(isValidSupplier) {
+            PurchaseOrderRegistry poRegister = PurchaseOrderRegistry(theManufcaturer.purchaseOrderRegistry);
+            bool isPoValid = poRegister.isValidPoForSupplier(po_number, seller_address);
+            if(isPoValid) {
+                InvoiceRegistry invoiceRegistry = InvoiceRegistry(theManufcaturer.invoiceRegistry);
+                return invoiceRegistry.createInvoice(invoiceNumber, po_number, manufacturer_address, seller_address);
+            }
+       }
+       
+       return 0;
+   }
     
 }
